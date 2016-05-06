@@ -35,6 +35,9 @@ public class UserTeamViewTest {
 
     @Given("^如果我在某团队里面$")
     public void there_should_be_more_than_one_team() throws Throwable {
+        new WebDriverWait(driver,3)
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(
+                        By.cssSelector("ul.card--flow li"),2));
         int teams = this.getElement("ul.card--flow").findElements(By.cssSelector("li")).size() - 1;
         assertTrue(teams > 0);
     }

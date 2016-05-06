@@ -7,23 +7,23 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 /**
  * Created by qmxie on 5/6/16.
  */
 public class SharedDriver extends EventFiringWebDriver {
-    private static final WebDriver REAL_DRIVER = new ChromeDriver();
-    private static final DriverThread CLOSE_THREAD = new DriverThread();
+    private static final WebDriver REAL_DRIVER = new FirefoxDriver();
+    private static Thread CLOSE_THREAD = new Thread(){
+        @Override
+        public void run() {
+            REAL_DRIVER.close();
+        }
+    };
 
     static {
-        try {
-            CLOSE_THREAD.setREAL_DRIVER(REAL_DRIVER);
             Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
-        }catch (RuntimeException e){
-            e.printStackTrace();
-            System.out.println("**** e " + e.getMessage());
-        }
     }
 
     public SharedDriver() {
