@@ -19,7 +19,7 @@ public class UserLoginDeliflow {
     @Given("^I enter deliflow url$")
     public void enter_deliflow_url() {
         driver = new SharedDriver();
-        driver.navigate().to("http://121.42.193.129:9900/login");
+        driver.navigate().to("http://deliflow-server:9900/login");
     }
 
     @When("^I login as admin$")

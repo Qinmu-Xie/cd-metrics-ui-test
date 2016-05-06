@@ -25,7 +25,7 @@ public class UserTeamViewTest {
     @Given("^我以admin登陆$")
     public void login_as_admin() {
         driver = new SharedDriver();
-        driver.navigate().to("http://121.42.193.129:9900/login");
+        driver.navigate().to("http://deliflow-server:9900/login");
         this.getElement("[name=username]").sendKeys("admin@localhost");
         this.getElement("[name=password]").sendKeys("admin");
         this.getElement("div .login--field.right").submit();
