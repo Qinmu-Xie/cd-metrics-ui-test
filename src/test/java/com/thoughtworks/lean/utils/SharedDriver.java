@@ -22,7 +22,12 @@ public class SharedDriver extends EventFiringWebDriver {
     };
 
     static {
-        Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
+        try {
+            Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            System.out.println("**** e " + e.getMessage());
+        }
     }
 
     public SharedDriver() {
