@@ -6,15 +6,19 @@ import cucumber.api.java.Before;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by qmxie on 5/6/16.
  */
 public class SharedDriver extends EventFiringWebDriver {
-    private static final WebDriver REAL_DRIVER = new FirefoxDriver();
+    private static  WebDriver REAL_DRIVER;
     private static Thread CLOSE_THREAD = new Thread(){
         @Override
         public void run() {
@@ -23,7 +27,15 @@ public class SharedDriver extends EventFiringWebDriver {
     };
 
     static {
-            Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
+        try {
+            REAL_DRIVER = new RemoteWebDriver(
+                    new URL("http://localhost:8001"),
+                    DesiredCapabilities.firefox());
+            REAL_DRIVER.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
     }
 
     public SharedDriver() {

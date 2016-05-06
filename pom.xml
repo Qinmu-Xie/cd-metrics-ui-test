@@ -45,6 +45,11 @@
       <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.detro</groupId>
+      <artifactId>phantomjsdriver</artifactId>
+      <version>1.2.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

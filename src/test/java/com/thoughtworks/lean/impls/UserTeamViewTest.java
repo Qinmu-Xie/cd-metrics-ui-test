@@ -18,6 +18,21 @@ import static org.junit.Assert.*;
 public class UserTeamViewTest {
     private String teamName;
     private WebDriver driver;
+
+    private void WaitForPresence(int seconds, String cssselector){
+        new WebDriverWait(driver, seconds)
+                .until(ExpectedConditions.presenceOfElementLocated(this.CssSelect(cssselector)));
+    }
+
+    private void WaitForTextToBe(int seconds, String cssselector, String text){
+        new WebDriverWait(driver, seconds)
+                .until(ExpectedConditions.textToBe(this.CssSelect(cssselector), text));
+    }
+
+    private By CssSelect(String cssselector){
+        return By.cssSelector(cssselector);
+    }
+
     private WebElement getElement(String cssSelector) {
         return driver.findElement(By.cssSelector(cssSelector));
     }
@@ -46,8 +61,7 @@ public class UserTeamViewTest {
     public void click_the_first_team() throws Throwable {
         teamName = this.getElement("ul.card--flow li a").getText();
         this.getElement("ul.card--flow li a").click();
-        WebDriverWait wait = new WebDriverWait(driver, 2);
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("li.top_nav__list-item a")));
+        this.WaitForTextToBe(5,"h3.header__title", teamName);
     }
 
     @Then("^我会进到该团队的页面$")
