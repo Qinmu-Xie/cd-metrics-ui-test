@@ -14,15 +14,11 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
  */
 public class SharedDriver extends EventFiringWebDriver {
     private static final WebDriver REAL_DRIVER = new ChromeDriver();
-    private static final Thread CLOSE_THREAD = new Thread() {
-        @Override
-        public void run() {
-            REAL_DRIVER.close();
-        }
-    };
+    private static final DriverThread CLOSE_THREAD = new DriverThread();
 
     static {
         try {
+            CLOSE_THREAD.setREAL_DRIVER(REAL_DRIVER);
             Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
         }catch (RuntimeException e){
             e.printStackTrace();
