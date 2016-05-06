@@ -1,12 +1,11 @@
 package com.thoughtworks.lean.impls;
 
+import cucumber.api.Scenario;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -15,17 +14,15 @@ import static org.junit.Assert.*;
 /**
  * Created by qmxie on 5/5/16.
  */
-public class UserTeamViewTest {
-    WebDriver driver = null;
+public class UserTeamViewTest extends BaseUITest {
     private String teamName;
-
-    private WebElement getE(String cssSelector){
+    private WebElement getE(String cssSelector) {
         return driver.findElement(By.cssSelector(cssSelector));
     }
 
     @Given("^我以admin登陆$")
     public void login_as_admin() {
-        driver = new ChromeDriver();
+        driver = getWebDriver(scenario.getName());
         driver.navigate().to("http://121.42.193.129:9900/login");
         this.getE("[name=username]").sendKeys("admin@localhost");
         this.getE("[name=password]").sendKeys("admin");
@@ -44,7 +41,7 @@ public class UserTeamViewTest {
     public void click_the_first_team() throws Throwable {
         teamName = this.getE("ul.card--flow li a").getText();
         this.getE("ul.card--flow li a").click();
-        WebDriverWait wait = new WebDriverWait(driver,2);
+        WebDriverWait wait = new WebDriverWait(driver, 2);
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("li.top_nav__list-item a")));
     }
 
@@ -63,4 +60,8 @@ public class UserTeamViewTest {
         assertNotNull(this.getE("#add-team div input"));
     }
 
+    @cucumber.api.java.Before("@ui_test")
+    public void before_ui_test(Scenario scenario) {
+        this.scenario = scenario;
+    }
 }
