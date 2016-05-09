@@ -30,7 +30,7 @@ public class SharedDriver extends EventFiringWebDriver {
     static {
         try {
             REAL_DRIVER = new RemoteWebDriver(
-                    new URL("http://gocd-server:8910"),
+                    new URL("http://go-server:8910"),
                     DesiredCapabilities.phantomjs());
             REAL_DRIVER.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             REAL_DRIVER.manage().window().setSize(new Dimension(1024,768));
