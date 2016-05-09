@@ -3,6 +3,7 @@ package com.thoughtworks.lean.utils;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -29,9 +30,10 @@ public class SharedDriver extends EventFiringWebDriver {
     static {
         try {
             REAL_DRIVER = new RemoteWebDriver(
-                    new URL("http://localhost:8001"),
-                    DesiredCapabilities.firefox());
+                    new URL("http://gocd-server:8910"),
+                    DesiredCapabilities.phantomjs());
             REAL_DRIVER.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            REAL_DRIVER.manage().window().setSize(new Dimension(1024,768));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

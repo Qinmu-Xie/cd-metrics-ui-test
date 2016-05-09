@@ -24,8 +24,8 @@ public class UserLoginDeliflow {
 
     @When("^I login as admin$")
     public void login_as_admin() {
-        driver.findElement(By.cssSelector("[name=username]")).sendKeys("admin@localhost");
-        driver.findElement(By.cssSelector("[name=password]")).sendKeys("admin");
+        driver.findElement(By.cssSelector("input[name=username]")).sendKeys("admin@localhost");
+        driver.findElement(By.cssSelector("input[name=password]")).sendKeys("admin");
         driver.findElement(By.cssSelector("div .login--field.right")).submit();
     }
 
