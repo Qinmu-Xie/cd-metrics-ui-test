@@ -11,7 +11,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +33,7 @@ public class SharedDriver extends EventFiringWebDriver {
                     DesiredCapabilities.phantomjs());
             REAL_DRIVER.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             REAL_DRIVER.manage().window().setSize(new Dimension(1024,768));
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
