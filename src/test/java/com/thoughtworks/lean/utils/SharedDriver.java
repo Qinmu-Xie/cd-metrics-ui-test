@@ -7,6 +7,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
@@ -31,6 +32,7 @@ public class SharedDriver extends EventFiringWebDriver {
             REAL_DRIVER = new RemoteWebDriver(
                     new URL("http://go-server:8910"),
                     DesiredCapabilities.phantomjs());
+           // REAL_DRIVER = new ChromeDriver();
             REAL_DRIVER.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             REAL_DRIVER.manage().window().setSize(new Dimension(1024,768));
         } catch (Exception e) {
