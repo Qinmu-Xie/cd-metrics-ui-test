@@ -3,7 +3,7 @@ Feature: all views should be working (no errors)
 
   Background:
     Given login as admin
-    Then choose team Test
+    Then choose the first team
 
     Scenario: team dashboard should work
       Then There should be more than 1 of [.card]
@@ -14,14 +14,9 @@ Feature: all views should be working (no errors)
       When click sidebar with title 流水线
       Then There should be more than 1 of [.pipeline-group__item]
       Then All [.pipeline-group__item_state] should not be empty
-      When click pipeline test-pipeline-1
-      Then There should be more than 1 of [.nav__tabs li]
-      Then Click every navTabs should nav to proper view
-
-    Scenario: pipeline template view should work
-      When click sidebar with title 流水线模版
-      Then There should be more than 1 of [.list-item]
-      Then There should be 1 of [.pipeline-template-preview__container]
+      When click the first pipeline
+      Then There should be more than 1 of [.sub-menus>li>a]
+      Then Click every [.sub-menus>li>a] should nav to proper view
 
     Scenario: pipeline monitor view should work
       When click sidebar with title 构建监控

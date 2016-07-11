@@ -18,18 +18,14 @@ import java.util.Map;
 import static com.thoughtworks.lean.utils.ConstantCssSelector.VIEW_TITLE;
 import static org.junit.Assert.*;
 
-/**
- * Created by qmxie on 5/26/16.
- */
 public class CheckViewComplete {
     private WebDriver driver;
     private Map<String, String> sideBarTitileToPageId = Maps.newHashMap();
 
     public CheckViewComplete() {
         driver = new SharedDriver();
-        this.sideBarTitileToPageId.put("流水线","#pipeline-dashboard");
-        this.sideBarTitileToPageId.put("流水线模版","#pipeline-templates");
-        this.sideBarTitileToPageId.put("构建监控","#pipeline-monitor");
+        this.sideBarTitileToPageId.put("流水线", "#pipeline-dashboard");
+        this.sideBarTitileToPageId.put("构建监控", "#pipeline-monitor");
     }
 
     private void WaitForPresence(int seconds, String cssselector) {
@@ -43,8 +39,22 @@ public class CheckViewComplete {
                 .until(ExpectedConditions.textToBe(this.CssSelect(cssselector), text));
     }
 
+    private void WaitForXpathTextToBe(int seconds, String xpathselector, String text) {
+        new WebDriverWait(driver, seconds)
+                .until(ExpectedConditions.textToBe(this.XpathSelect(xpathselector), text));
+    }
+
+    private void WaitForElementStyleToBe(int seconds, WebElement element, String value) {
+        new WebDriverWait(driver, seconds)
+                .until(ExpectedConditions.attributeToBe(element, "style", value));
+    }
+
     private By CssSelect(String cssselector) {
         return By.cssSelector(cssselector);
+    }
+
+    private By XpathSelect(String xpathselector) {
+        return By.xpath(xpathselector);
     }
 
     private WebElement getElement(String cssSelector) {
@@ -55,7 +65,20 @@ public class CheckViewComplete {
         return driver.findElements(By.cssSelector(cssSelector));
     }
 
-    private void navigateTo(String path){
+    private WebElement getElementViaXpath(String xpathselector) {
+        return driver.findElement(By.xpath(xpathselector));
+    }
+
+    private List<WebElement> getElementsViaXpath(String xpathselector) {
+        return driver.findElements(By.xpath(xpathselector));
+    }
+
+    private WebElement getElementByContent(String xpathselector, String content) {
+        String selector = xpathselector + "[text()='" + content + "']";
+        return this.getElementViaXpath(xpathselector);
+    }
+
+    private void navigateTo(String path) {
         driver.navigate().to(path);
     }
 
@@ -85,7 +108,15 @@ public class CheckViewComplete {
 
     @Then("^choose team (\\S*)$")
     public void chooseTeam(String teamName) throws Throwable {
-        this.getElement("ul.card--flow li a[title=\""+ teamName +"\"]").click();
+        this.getElement("ul.card--flow li a[title=\"" + teamName + "\"]").click();
+        this.WaitForTextToBe(5, VIEW_TITLE, teamName);
+    }
+
+    @Then("^choose the first team$")
+    public void chooseFirstTeam() throws Throwable {
+        WebElement ele = this.getElement("ul.card--flow li a[title]");
+        String teamName = ele.getText();
+        ele.click();
         this.WaitForTextToBe(5, VIEW_TITLE, teamName);
     }
 
@@ -99,24 +130,34 @@ public class CheckViewComplete {
 
     @Then("^All \\[(.*)\\] should not be empty$")
     public void ContentShouldNotBeEmpty(String cssSelector) throws Throwable {
-        for (WebElement ele: this.getElements(cssSelector)){
+        for (WebElement ele : this.getElements(cssSelector)) {
             assertFalse(Strings.isNullOrEmpty(ele.getText()));
         }
     }
 
     @When("^click pipeline (\\S+)$")
     public void choosePipeline(String pipelineName) throws Throwable {
-        this.getElement(".pipeline-group__item_title[title='"+pipelineName+"']>a").click();
+        this.getElement(".pipeline-group__item_title[title='" + pipelineName + "']>a").click();
         this.WaitForTextToBe(15, VIEW_TITLE, pipelineName);
     }
 
-    @Then("^Click every navTabs should nav to proper view$")
-    public void allClickShouldNavToPoperView() throws Throwable {
-        for (WebElement ele: this.getElements(".nav__tabs li a")){
+    @When("^click the first pipeline$")
+    public void chooseFirstPipeline() throws Throwable {
+        WebElement ele = this.getElement(".pipeline-group__item_title[title]>a");
+        String pipelineName = ele.getText().split("/")[0];
+        ele.click();
+        this.WaitForTextToBe(15, VIEW_TITLE, pipelineName);
+    }
+
+    @Then("^Click every \\[(.*)\\] should nav to proper view$")
+    public void allClickShouldNavToPoperView(String cssSelector) throws Throwable {
+        for (WebElement ele : this.getElements(cssSelector)) {
             String tabName = ele.getText();
-            ele.click();
-            WaitForTextToBe(5, ".nav__tabs .active a", tabName);
-            assertNotNull(this.getElement(VIEW_TITLE));
+            if (!tabName.equals("")) {
+                ele.click();
+                this.WaitForElementStyleToBe(5, ele, "font-weight: 600;");
+                assertNotNull(this.getElement(VIEW_TITLE));
+            }
         }
     }
 }

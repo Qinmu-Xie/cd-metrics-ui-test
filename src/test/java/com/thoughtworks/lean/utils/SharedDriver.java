@@ -15,9 +15,6 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by qmxie on 5/6/16.
- */
 public class SharedDriver extends EventFiringWebDriver {
     private static  WebDriver REAL_DRIVER;
     private static Thread CLOSE_THREAD = new Thread(){
@@ -32,7 +29,7 @@ public class SharedDriver extends EventFiringWebDriver {
             REAL_DRIVER = new RemoteWebDriver(
                     new URL("http://go-server:8910"),
                     DesiredCapabilities.phantomjs());
-           // REAL_DRIVER = new ChromeDriver();
+            //REAL_DRIVER = new ChromeDriver();
             REAL_DRIVER.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             REAL_DRIVER.manage().window().setSize(new Dimension(1024,768));
         } catch (Exception e) {
