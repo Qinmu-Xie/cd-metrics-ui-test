@@ -6,6 +6,7 @@ import com.thoughtworks.lean.utils.SharedDriver;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,7 +30,6 @@ public class CheckViewComplete {
     }
 
     private void WaitForPresence(int seconds, String cssselector) {
-
         new WebDriverWait(driver, seconds)
                 .until(ExpectedConditions.presenceOfElementLocated(this.CssSelect(cssselector)));
     }
@@ -82,10 +82,12 @@ public class CheckViewComplete {
         driver.navigate().to(path);
     }
 
-
     @Given("^login as admin$")
     public void loginAsAdmin() {
-        driver.navigate().to("http://deliflow-server:9900/login");
+        String deliflowServer = System.getenv("DELIFLOW_SERVER");
+        driver.navigate().to(deliflowServer);
+        this.WaitForPresence(5, "input[name=username]");
+        this.WaitForPresence(5, "input[name=password]");
         driver.findElement(By.cssSelector("input[name=username]")).sendKeys("admin@localhost");
         driver.findElement(By.cssSelector("input[name=password]")).sendKeys("admin");
         driver.findElement(By.cssSelector("div .login--field.right")).submit();
@@ -114,6 +116,7 @@ public class CheckViewComplete {
 
     @Then("^choose the first team$")
     public void chooseFirstTeam() throws Throwable {
+        this.WaitForPresence(10, "ul.card--flow li a[title]");
         WebElement ele = this.getElement("ul.card--flow li a[title]");
         String teamName = ele.getText();
         ele.click();
