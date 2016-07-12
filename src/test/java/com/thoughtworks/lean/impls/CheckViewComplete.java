@@ -11,7 +11,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.SystemClock;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,7 @@ import static org.junit.Assert.*;
 public class CheckViewComplete {
     private WebDriver driver;
     private Map<String, String> sideBarTitileToPageId = Maps.newHashMap();
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckViewComplete.class);
 
     public CheckViewComplete() {
         driver = new SharedDriver();
@@ -85,13 +89,21 @@ public class CheckViewComplete {
     @Given("^login as admin$")
     public void loginAsAdmin() {
         String deliflowServer = System.getenv("DELIFLOW_SERVER");
+        String deliflowUser = System.getenv("DELIFLOW_USER");
+        String deliflowPwd = System.getenv("DELIFLOW_PWD");
+        if (Strings.isNullOrEmpty(deliflowServer) || Strings.isNullOrEmpty(deliflowUser) || Strings.isNullOrEmpty(deliflowPwd)){
+            LOGGER.error("The Three ENV params MUST be set, DELIFLOW_SERVER (Deliflow login page), DELIFLOW_USER and DELIFLOW_PWD");
+            System.exit(1);
+        }
+        LOGGER.info("Testing Target Deliflow Addr: " + deliflowServer);
         driver.navigate().to(deliflowServer);
         this.WaitForPresence(5, "input[name=username]");
         this.WaitForPresence(5, "input[name=password]");
-        driver.findElement(By.cssSelector("input[name=username]")).sendKeys("admin@localhost");
-        driver.findElement(By.cssSelector("input[name=password]")).sendKeys("admin");
+        driver.findElement(By.cssSelector("input[name=username]")).sendKeys(deliflowUser);
+        driver.findElement(By.cssSelector("input[name=password]")).sendKeys(deliflowPwd);
         driver.findElement(By.cssSelector("div .login--field.right")).submit();
         assertTrue(driver.getTitle().contains("DeliFlow"));
+        LOGGER.info("Successfully login...");
     }
 
     @Then("^There should be more than (\\d+) of \\[(.*)\\]$")

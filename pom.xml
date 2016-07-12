@@ -53,7 +53,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.6.1</version>
+      <version>1.7.5</version>
     </dependency>
   </dependencies>
   <build>
@@ -65,11 +65,6 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.12.4</version>
-        <configuration>
-          <systemPropertyVariables>
-            <environment>${env.addr}</environment>
-          </systemPropertyVariables>
-        </configuration>
       </plugin>
     </plugins>
   </build>
