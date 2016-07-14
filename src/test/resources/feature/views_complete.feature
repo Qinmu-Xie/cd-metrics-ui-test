@@ -20,4 +20,4 @@ Feature: all views should be working (no errors)
 
     Scenario: pipeline monitor view should work
       When click sidebar with title 构建监控
-      Then There should be 10 of [.pipeline-overview-item]
+      Then There should be more than 0 of [.pipeline-overview-item]
