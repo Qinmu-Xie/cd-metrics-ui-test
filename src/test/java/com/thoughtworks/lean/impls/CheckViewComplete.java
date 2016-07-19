@@ -143,10 +143,11 @@ public class CheckViewComplete {
         this.WaitForPresence(10, pageCssSelector);
     }
 
-    @Then("^All \\[(.*)\\] should not be empty$")
+    @Then("^All \\[(.*)\\] should not be empty or undefined$")
     public void ContentShouldNotBeEmpty(String cssSelector) throws Throwable {
         for (WebElement ele : this.getElements(cssSelector)) {
             assertFalse(Strings.isNullOrEmpty(ele.getText()));
+            assertFalse("undefined".equals(ele.getText()));
         }
     }
 

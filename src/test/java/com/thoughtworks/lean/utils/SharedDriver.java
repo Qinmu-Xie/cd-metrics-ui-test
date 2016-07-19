@@ -66,13 +66,4 @@ public class SharedDriver extends EventFiringWebDriver {
         manage().deleteAllCookies();
     }
 
-    @After
-    public void embedScreenshot(Scenario scenario) {
-        try {
-            byte[] screenshot = getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        } catch (WebDriverException somePlatformsDontSupportScreenshots) {
-            System.err.println(somePlatformsDontSupportScreenshots.getMessage());
-        }
-    }
 }
