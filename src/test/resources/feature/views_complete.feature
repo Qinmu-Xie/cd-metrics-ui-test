@@ -12,7 +12,7 @@ Feature: all views should be working (no errors)
 
     Scenario: pipeline dashboard should work
       When click sidebar with title 流水线
-      Then There should be more than 1 of [.pipeline-group__item]
+      Then There should be more than 0 of [.pipeline-group__item]
       Then All [.pipeline-group__item_state] should not be empty or undefined
       Then All [.pipeline-group__item_title] should not be empty or undefined
       Then There should be more than 0 of [.pipeline-group__item_compare]
